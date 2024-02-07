@@ -1,0 +1,366 @@
+
+#define StartPin 0
+#define PinEnde 28
+#define Pin 29
+#define Zahn 30
+#define ResetTime 15
+
+byte Taste[PinEnde];
+//              R , L1 , L2 , L3 , L4 , L5
+//            12345678901234567890123456789
+char KEY[] = "000054321Fswta[io]emjklbncvzn";
+//                R         L1            L2          L3        L4        L5
+//           1  2  3  4| 5  6  7  8  9|0 1 2 3 4|5  6 7 8 9|0 1 2 3 4|5 6 7 8 9
+int Mod[] = {4, 5, 6, 7, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 10, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0};
+volatile int zuvor, PIN, neu, FF, FR;
+volatile unsigned long Timer, TimerTasten, Presstime;
+
+void Key(int Taste) {
+
+  switch (Taste) {
+    case 0:
+      if (millis() - Presstime <= 1000) {
+        Keyboard.press(MODIFIERKEY_SHIFT);
+        Keyboard.press(KEY_2);
+        delay(100);
+        Keyboard.release(KEY_2);
+        Keyboard.release(MODIFIERKEY_SHIFT);
+      }
+      else {
+        Keyboard.press(MODIFIERKEY_SHIFT);
+        Keyboard.press(KEY_8);
+        delay(100);
+        Keyboard.release(KEY_8);
+        Keyboard.release(MODIFIERKEY_SHIFT);
+      }
+      break;
+
+    case 1:
+      if (millis() - Presstime <= 1000) {
+        Keyboard.press(MODIFIERKEY_SHIFT);
+        Keyboard.press(KEY_6);
+        delay(100);
+        Keyboard.release(KEY_6);
+        Keyboard.release(MODIFIERKEY_SHIFT);
+      }
+      else {
+        Keyboard.press(MODIFIERKEY_SHIFT);
+        Keyboard.press(KEY_6);
+        delay(100);
+        Keyboard.release(KEY_6);
+        Keyboard.release(MODIFIERKEY_SHIFT);
+      }
+      break;
+
+    case 2:
+      if (millis() - Presstime <= 1000) {
+        Keyboard.press(MODIFIERKEY_SHIFT);
+        Keyboard.press(KEY_4);
+        delay(100);
+        Keyboard.release(KEY_4);
+        Keyboard.release(MODIFIERKEY_SHIFT);
+      }
+      else {
+        Keyboard.press(MODIFIERKEY_SHIFT);
+        Keyboard.press(KEY_5);
+        delay(100);
+        Keyboard.release(KEY_5);
+        Keyboard.release(MODIFIERKEY_SHIFT);
+      }
+      break;
+
+    case 3:
+      if (millis() - Presstime <= 1000) {
+        Keyboard.press(MODIFIERKEY_SHIFT);
+        Keyboard.press(KEY_3);
+        delay(100);
+        Keyboard.release(KEY_3);
+        Keyboard.release(MODIFIERKEY_SHIFT);
+      }
+      else {
+        Keyboard.press(MODIFIERKEY_SHIFT);
+        Keyboard.press(KEY_1);
+        delay(100);
+        Keyboard.release(KEY_1);
+        Keyboard.release(MODIFIERKEY_SHIFT);
+      }
+      break;
+
+    case 4:
+      Keyboard.press(KEY_5);
+      delay(100);
+      Keyboard.release(KEY_5);
+      break;
+
+    case 5:
+      Keyboard.press(KEY_4);
+      delay(100);
+      Keyboard.release(KEY_4);
+      break;
+    case 6:
+      Keyboard.press(KEY_3);
+      delay(100);
+      Keyboard.release(KEY_3);
+      break;
+    case 7:
+      Keyboard.press(KEY_2);
+      delay(100);
+      Keyboard.release(KEY_2);
+      break;
+    case 8:
+      Keyboard.press(KEY_1);
+      delay(100);
+      Keyboard.release(KEY_1);
+      break;
+    case 9:
+      Keyboard.press(MODIFIERKEY_CTRL);
+      Keyboard.press(KEY_F);
+      delay(100);
+      Keyboard.release(KEY_F);
+      Keyboard.release(MODIFIERKEY_CTRL);
+      break;
+    case 10:
+      Keyboard.press(KEY_S);
+      delay(100);
+      Keyboard.release(KEY_S);
+      break;
+    case 11:
+      Keyboard.press(KEY_W);
+      delay(100);
+      Keyboard.release(KEY_W);
+      break;
+    case 12:
+      Keyboard.press(KEY_T);
+      delay(100);
+      Keyboard.release(KEY_T);
+      break;
+    case 13:
+      Keyboard.press(KEY_A);
+      delay(100);
+      Keyboard.release(KEY_A);
+      break;
+    case 14:
+      if (millis() - Presstime <= 1000) {
+        Keyboard.press(KEY_BACKSPACE);
+        delay(100);
+        Keyboard.release(KEY_BACKSPACE);
+      }
+      else {
+        Keyboard.press(KEY_DELETE);
+        delay(100);
+        Keyboard.release(KEY_DELETE);
+      }
+      break;
+    case 15:
+      Keyboard.press(MODIFIERKEY_CTRL);
+      Keyboard.press(MODIFIERKEY_SHIFT);
+      Keyboard.press(MODIFIERKEY_ALT);
+      Keyboard.press(KEY_9);
+      delay(100);
+      Keyboard.release(KEY_9);
+      Keyboard.release(MODIFIERKEY_CTRL);
+      Keyboard.release(MODIFIERKEY_SHIFT);
+      Keyboard.release(MODIFIERKEY_ALT);
+      break;
+    case 16:
+      Keyboard.press(KEY_O);
+      delay(100);
+      Keyboard.release(KEY_O);
+      break;
+    case 17:
+      Keyboard.press(KEY_I);
+      delay(100);
+      Keyboard.release(KEY_I);
+      break;
+    case 18:
+      Keyboard.press(MODIFIERKEY_CTRL);
+      Keyboard.press(MODIFIERKEY_SHIFT);
+      Keyboard.press(MODIFIERKEY_ALT);
+      Keyboard.press(KEY_8);
+      delay(100);
+      Keyboard.release(KEY_8);
+      Keyboard.release(MODIFIERKEY_CTRL);
+      Keyboard.release(MODIFIERKEY_SHIFT);
+      Keyboard.release(MODIFIERKEY_ALT);
+      break;
+    case 19:
+      Keyboard.press(KEY_B);
+      delay(100);
+      Keyboard.release(KEY_B);
+      break;
+    case 20:
+      Keyboard.press(KEY_L);
+      delay(100);
+      Keyboard.release(KEY_L);
+      break;
+    case 21:
+      Keyboard.press(KEY_K);
+      delay(100);
+      Keyboard.release(KEY_K);
+      break;
+    case 22:
+      Keyboard.press(KEY_J);
+      delay(100);
+      Keyboard.release(KEY_J);
+      break;
+    case 23:
+      if (millis() - Presstime <= 1000) {
+        Keyboard.press(KEY_M);
+        delay(100);
+        Keyboard.release(KEY_M);
+      }
+      else {
+        Keyboard.press(MODIFIERKEY_ALT);
+        Keyboard.press(KEY_M);
+        delay(100);
+        Keyboard.release(KEY_M);
+        Keyboard.release(MODIFIERKEY_ALT);
+      }
+      break;
+    case 24:
+      Keyboard.press(MODIFIERKEY_CTRL);
+      Keyboard.press(MODIFIERKEY_SHIFT);
+      Keyboard.press(KEY_L);
+      delay(100);
+      Keyboard.release(KEY_L);
+      Keyboard.release(MODIFIERKEY_CTRL);
+      Keyboard.release(MODIFIERKEY_SHIFT);
+      break;
+    case 25:
+      Keyboard.press(MODIFIERKEY_CTRL);
+      Keyboard.press(KEY_Y);
+      delay(100);
+      Keyboard.release(KEY_Y);
+      Keyboard.release(MODIFIERKEY_CTRL);
+      break;
+    case 26:
+      Keyboard.press(MODIFIERKEY_CTRL);
+      Keyboard.press(KEY_V);
+      delay(100);
+      Keyboard.release(KEY_V);
+
+      Keyboard.release(MODIFIERKEY_CTRL);
+      break;
+    case 27:
+      Keyboard.press(MODIFIERKEY_CTRL);
+      Keyboard.press(KEY_C);
+      delay(100);
+      Keyboard.release(KEY_C);
+
+      Keyboard.release(MODIFIERKEY_CTRL);
+      break;
+    case 28:
+      Keyboard.press(KEY_N);
+      delay(100);
+      Keyboard.release(KEY_N);
+      break;
+  }
+}
+void setup() {
+
+  for (int i = StartPin; i < PinEnde; i++) {
+
+    pinMode(i, INPUT_PULLUP);
+    Taste[i] = digitalRead(i);
+  }
+
+ for (int i = StartPin; i < PinEnde; i++) {
+
+      Taste[i] = digitalRead(i);
+    }
+  pinMode(Pin, INPUT);
+  pinMode(Zahn, INPUT);
+
+  Serial.begin(9600);
+  Timer = millis();
+  TimerTasten = millis();
+  Presstime = millis();
+  delay(100);
+}
+
+void loop() {
+
+  //-----------------------------Encoder auslesen und entprellen ---------------------
+  PIN = digitalRead(Pin);
+  if (((millis() - Timer) > 2) && (PIN != zuvor)) {
+    zuvor = PIN;
+    if ((millis() - Timer) > ResetTime) {
+      FF = 0;
+      FR = 0;
+    }
+    Timer = millis();
+    neu = 1;
+  }
+  //---------------------------- Encoder ausführen ----------------------------------
+  if ((millis() - Timer > 2) && (neu == 1)) {
+    if (FF > 20) {
+      Serial.println("FRechts");
+      Keyboard.press(MODIFIERKEY_SHIFT);
+      Keyboard.press(KEY_RIGHT);
+      Keyboard.release(KEY_RIGHT);
+      Keyboard.release(MODIFIERKEY_SHIFT);
+
+    }
+    if (FR > 20) {
+
+      Serial.println("FLinks");
+      Keyboard.press(MODIFIERKEY_SHIFT);
+      Keyboard.press(KEY_LEFT);
+      Keyboard.release(KEY_LEFT);
+      Keyboard.release(MODIFIERKEY_SHIFT);
+
+    }
+    if ((FF <= 20) && (FR <= 20)) {
+      if (digitalRead(Zahn) == zuvor) {
+        Serial.println("Rechts");
+        Keyboard.press(KEY_RIGHT);
+        Keyboard.release(KEY_RIGHT);
+        FF++;
+
+      }
+      if ((digitalRead(Zahn) != zuvor) || (FR > 20)) {
+        Serial.println("Links");
+        Keyboard.press(KEY_LEFT);
+        Keyboard.release(KEY_LEFT);
+        FR++;
+      }
+    }
+    neu = 0;
+  }
+
+  //-----------------------------------Tasten abfragen ----------------------------
+  if (millis() - TimerTasten >= 50) {
+    Tastenabfrage();
+    TimerTasten = millis();
+  }
+  //-----------------------------------Timer überlauf------------------------------------
+  if (Timer > millis()) {
+    Timer = millis();
+  }
+  if (TimerTasten > millis()) {
+    TimerTasten = millis();
+  }
+  if (Presstime > millis()) {
+    Presstime = millis();
+  }
+
+
+}
+
+
+void Tastenabfrage() {
+  for (int i = StartPin; i < PinEnde; i++) {
+
+    if (Taste[i] != digitalRead(i)) {
+      Taste[i] = digitalRead(i);
+      if (Taste[i] == LOW) {
+        Presstime = millis();
+      }
+
+      else {
+
+        Key(i);
+      }
+    }
+  }
+}
